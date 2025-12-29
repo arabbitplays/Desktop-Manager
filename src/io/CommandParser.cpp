@@ -1,6 +1,9 @@
 #include "include/io/CommandParser.hpp"
+#include <charconv>
 #include <iostream>
 #include <cassert>
+#include <stdexcept>
+#include <system_error>
 
 namespace io {
     std::vector<std::string> splitAt(const std::string& input, char sep) {
@@ -26,5 +29,16 @@ namespace io {
         cmd->keyword = parts.front();
         cmd->args.assign(parts.begin() + 1, parts.end());
         return cmd;
+    }
+
+    int32_t CommandParser::parseIntArg(const std::string& arg) {
+        int32_t value;
+        auto [ptr, ec] = std::from_chars(arg.data(), arg.data() + arg.size(), value);
+        
+        if (ec == std::errc{} && ptr == arg.data() + arg.size()) {
+            return value;
+        } else {
+            throw std::runtime_error("Argument is not a valid integer!");
+        }
     }
 }

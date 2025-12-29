@@ -1,16 +1,19 @@
 #include "include/DesktopManager.hpp"
 #include "controller/ThemeController.hpp"
+#include "controller/WorkspaceController.hpp"
 #include "io/CommandParser.hpp"
 #include <memory>
 
+#include <ostream>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <iostream>
-
+#include <util/MonitorUtil.hpp>
 
 void DesktopManager::init() {
-    theme_controller = std::make_shared<ThemeController>();
+    controllers.push_back(std::make_shared<ThemeController>());
+    controllers.push_back(std::make_shared<WorkspaceController>());
 }
 
 void DesktopManager::run() {
@@ -25,6 +28,7 @@ void DesktopManager::run() {
 
     io::CommandParser parser;
 
+    MonitorUtil::getMonitorNamesForCurrSystem();
     while (true) {
         int client = accept(server, nullptr, nullptr);
         char buf[256];
@@ -34,11 +38,15 @@ void DesktopManager::run() {
             std::string cmd_string(buf);
             io::CommandHandle cmd = parser.parseCommand(cmd_string);
             std::cout << "Received command: " << cmd_string << "\n";
-            for (const auto& arg : cmd->args) {
-                std::cout << "|" << arg << "|" << std::endl;
-            }
-            if (theme_controller->getKeyword() == cmd->keyword) {
-                theme_controller->execute(cmd);
+
+            for (const auto& controller : controllers) {
+                if (controller->getKeyword() == cmd->keyword) {
+                    try {
+                        controller->execute(cmd);
+                    } catch (const std::exception& e) {
+                        std::cout << "Error while executing command: " << e.what() << std::endl;
+                    }
+                }
             }
         }
         close(client);

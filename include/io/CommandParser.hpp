@@ -18,6 +18,7 @@ namespace io {
     public:
         CommandParser() = default;
         std::shared_ptr<Command> parseCommand(const std::string& raw);
+        static int32_t parseIntArg(const std::string& arg);
     };
 }
 

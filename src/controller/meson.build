@@ -3,4 +3,5 @@
 
 src += files(
   'ThemeController.cpp',
+  'WorkspaceController.cpp',
 )

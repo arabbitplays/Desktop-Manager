@@ -3,14 +3,15 @@
 
 #include <string>
 #include "io/CommandParser.hpp"
+#include <controller/IController.hpp>
 
-class ThemeController {
+class ThemeController : public IController {
 public:
     ThemeController() = default;
     ~ThemeController() = default;
 
-    std::string getKeyword() const;
-    void execute(io::CommandHandle& cmd);
+    std::string getKeyword() const override;
+    void execute(io::CommandHandle& cmd) override;
 private:
 };
 
