@@ -18,14 +18,18 @@ void DesktopManager::init() {
 }
 
 void DesktopManager::run() {
+    std::string socket_path = "/run/desktop-manager/desktop-manager.sock"; 
+
     int server = socket(AF_UNIX, SOCK_STREAM, 0);
     sockaddr_un addr{};
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, "/run/desktop-manager/desktop-manager.sock");
+    strcpy(addr.sun_path, socket_path.c_str()); 
     unlink(addr.sun_path);
 
     bind(server, (sockaddr*)&addr, sizeof(addr));
     listen(server, 5);
+
+    std::cout << "Listening on socket " << socket_path << std::endl;
 
     io::CommandParser parser;
 
