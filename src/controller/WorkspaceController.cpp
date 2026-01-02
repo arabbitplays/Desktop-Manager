@@ -29,7 +29,7 @@ void WorkspaceController::execute(io::CommandHandle &cmd) {
 
 void WorkspaceController::switchWorkspace(uint32_t target_virtual) const {
     for (uint32_t i = 0; i < monitor_names.size(); i++) {
-        ShellUtil::executeShellCommand("hyprctl dispatch workspace " + std::to_string(i + 1) + std::to_string(target_virtual));
+        ShellUtil::executeShellCommand("/run/current-system/sw/bin/hyprctl dispatch workspace " + std::to_string(i + 1) + std::to_string(target_virtual));
     }
 }
 
