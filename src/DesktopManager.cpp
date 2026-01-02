@@ -18,16 +18,25 @@ void DesktopManager::init() {
 }
 
 void DesktopManager::run() {
-    std::string socket_path = "/run/desktop-manager/desktop-manager.sock"; 
+    std::string socket_path = std::string(getenv("XDG_RUNTIME_DIR")) + "/desktop-manager/desktop-manager.sock"; 
 
     int server = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (server < 0) { perror("socket"); exit(1); }
+
     sockaddr_un addr{};
     addr.sun_family = AF_UNIX;
     strcpy(addr.sun_path, socket_path.c_str()); 
     unlink(addr.sun_path);
 
-    bind(server, (sockaddr*)&addr, sizeof(addr));
-    listen(server, 5);
+    if (bind(server, (sockaddr*)&addr, sizeof(addr)) < 0) { 
+        perror("bind");
+        exit(1);
+    }
+
+    if (listen(server, 5) < 0) {
+        perror("listen");
+        exit(1);
+    }
 
     std::cout << "Listening on socket " << socket_path << std::endl;
 
