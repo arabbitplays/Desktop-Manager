@@ -1,3 +1,4 @@
+
 #include "include/DesktopManager.hpp"
 #include "controller/ThemeController.hpp"
 #include "controller/WorkspaceController.hpp"
@@ -20,7 +21,7 @@ void DesktopManager::run() {
     int server = socket(AF_UNIX, SOCK_STREAM, 0);
     sockaddr_un addr{};
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, "/tmp/desktop_manager.sock");
+    strcpy(addr.sun_path, "/run/desktop-manager/desktop-manager.sock");
     unlink(addr.sun_path);
 
     bind(server, (sockaddr*)&addr, sizeof(addr));
