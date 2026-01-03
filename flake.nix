@@ -43,10 +43,7 @@
           pname = "DesktopManager";
           version = "1.0.0";
 
-          src = pkgs.fetchgit {
-            url = "https://github.com/arabbitplays/Desktop-Manager";
-            sha256 = "FVIKafe4D+dlT2IOFGZ+Cd9nHIbqW+BVsPgChJXsis8=";
-          };
+          src = ./.;
 
           nativeBuildInputs = with pkgs; [
             meson
