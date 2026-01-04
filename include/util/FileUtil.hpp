@@ -13,8 +13,19 @@ public:
         ShellUtil::executeShellCommand("cp " + src_path + " " + dst_path);
     }
 
+    static std::string expandHome(const std::string& path) {
+        if (!path.starts_with("~"))
+            return path;
+
+        const char* home = std::getenv("HOME");
+        if (!home)
+            throw std::runtime_error("HOME not set");
+
+        return std::string(home) + path.substr(1);
+    }
+
     static void overwriteFile(const std::string& path, const std::string& content) {
-        std::ofstream file(path, std::ios::out | std::ios::trunc);
+        std::ofstream file(expandHome(path), std::ios::out | std::ios::trunc);
         if (!file) {
             throw std::runtime_error("Failed to open file: " + path);
         }
