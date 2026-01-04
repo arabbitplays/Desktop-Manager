@@ -3,6 +3,8 @@
 #include "util/MonitorUtil.hpp"
 #include "util/ShellUtil.hpp"
 #include <cassert>
+#include <iostream>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 
@@ -47,6 +49,7 @@ void WorkspaceController::switchWorkspace(uint32_t target_virtual) const {
 void WorkspaceController::sendWindow(uint32_t target_virtual) const {
     std::string active_window = getActiveWindowId();
     Workspace workspace = getCurrentWorkspace();
+    std::cout << active_window << std::endl;
     ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " dispatch movetoworkspacesilent " + std::to_string(workspace.physical_id) + std::to_string(target_virtual) + ",address:" + active_window);
 }
 
@@ -61,6 +64,8 @@ void WorkspaceController::moveWindow(int32_t physical_delta) const {
 }
 
 WorkspaceController::Workspace WorkspaceController::getCurrentWorkspace() const {
+    std::string s = ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j | jq -r '.id'");
+    std::cout << s << std::endl;
     uint32_t workspace = ShellUtil::parseStringToInt(ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j | jq -r '.id'"));
     return {workspace / 10, workspace % 10};
 }
