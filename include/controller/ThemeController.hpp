@@ -8,6 +8,12 @@
 
 class ThemeController : public IController {
 public:
+    struct Theme {
+        std::string wallpaper_name;
+        std::string kitty_theme;
+        std::string nvim_theme;
+    };
+
     ThemeController();
     ~ThemeController() = default;
 

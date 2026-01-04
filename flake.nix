@@ -2,7 +2,7 @@
   description = "DesktopManager flake with devShell and build derivation";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
   };
 
   outputs = { self, nixpkgs }: let
@@ -43,7 +43,7 @@
           pname = "DesktopManager";
           version = "1.0.0";
 
-          src = ./.;
+          src = self;
 
           nativeBuildInputs = with pkgs; [
             meson
