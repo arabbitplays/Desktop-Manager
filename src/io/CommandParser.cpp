@@ -1,5 +1,7 @@
 #include "include/io/CommandParser.hpp"
+#include "util/ShellUtil.hpp"
 #include <charconv>
+#include <exception>
 #include <iostream>
 #include <cassert>
 #include <stdexcept>
@@ -32,12 +34,9 @@ namespace io {
     }
 
     int32_t CommandParser::parseIntArg(const std::string& arg) {
-        int32_t value;
-        auto [ptr, ec] = std::from_chars(arg.data(), arg.data() + arg.size(), value);
-        
-        if (ec == std::errc{} && ptr == arg.data() + arg.size()) {
-            return value;
-        } else {
+        try {
+            return ShellUtil::parseStringToInt(arg);
+        } catch (std::exception& e) {
             throw std::runtime_error("Argument is not a valid integer!");
         }
     }
