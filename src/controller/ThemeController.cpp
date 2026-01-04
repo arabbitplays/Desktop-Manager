@@ -5,6 +5,7 @@
 #include "util/FileUtil.hpp"
 #include <filesystem>
 #include <iostream>
+#include <string>
 
 namespace fs = std::filesystem;
 
@@ -37,18 +38,21 @@ void ThemeController::execute(io::CommandHandle& cmd) {
 }
 
 void ThemeController::setWallpaperAll(const std::string& name) {
-    ShellUtil::executeShellCommand("swww img " + std::string(WALLPAPER_DIR) + "/" + name + " " + std::string(SWWW_OPTIONS));
+    std::string output = ShellUtil::executeShellCommand("swww img " + std::string(WALLPAPER_DIR) + "/" + name + " " + std::string(SWWW_OPTIONS));
+    ShellUtil::printShellOutput(output);
 }
 
 void ThemeController::setWallpaper(const std::string name, const std::string& monitor_name) const {
-    ShellUtil::executeShellCommand("swww img " + std::string(WALLPAPER_DIR) + "/" + name + " " + std::string (SWWW_OPTIONS) + " -o " + monitor_name);
+    std::string output = ShellUtil::executeShellCommand("swww img " + std::string(WALLPAPER_DIR) + "/" + name + " " + std::string (SWWW_OPTIONS) + " -o " + monitor_name);
+    ShellUtil::printShellOutput(output);
 } 
 
 void ThemeController::setKittyTheme(const std::string& name) {
     std::string src = std::string(KITTY_THEME_DIR) + "/" + name;
     std::string dst = std::string(KITTY_THEME_FILE);
     FileUtil::copyFile(src, dst);    
-    ShellUtil::executeShellCommand("kill -USR1 $(pidof kitty)");
+    std::string output = ShellUtil::executeShellCommand("kill -USR1 $(pidof kitty)");
+    ShellUtil::printShellOutput(output);
 }
 
 void ThemeController::setNvimTheme(const std::string& name) {

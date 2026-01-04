@@ -42,14 +42,15 @@ void WorkspaceController::execute(io::CommandHandle &cmd) {
 
 void WorkspaceController::switchWorkspace(uint32_t target_virtual) const {
     for (uint32_t i = 0; i < monitor_names.size(); i++) {
-        ShellUtil::executeShellCommand("hyprctl dispatch workspace " + std::to_string(i + 1) + std::to_string(target_virtual));
+        ShellUtil::printShellOutput(ShellUtil::executeShellCommand("hyprctl dispatch workspace " + std::to_string(i + 1) + std::to_string(target_virtual)));
     }
 }
 
 void WorkspaceController::sendWindow(uint32_t target_virtual) const {
     std::string active_window = getActiveWindowId();
     Workspace workspace = getCurrentWorkspace();
-    ShellUtil::executeShellCommand("hyprctl dispatch movetoworkspacesilent " + std::to_string(workspace.physical_id) + std::to_string(target_virtual) + ",address:" + active_window);
+    std::string result = ShellUtil::executeShellCommand("hyprctl dispatch movetoworkspacesilent " + std::to_string(workspace.physical_id) + std::to_string(target_virtual) + ",address:" + active_window);
+    ShellUtil::printShellOutput(result);
 }
 
 void WorkspaceController::moveWindow(int32_t physical_delta) const {
