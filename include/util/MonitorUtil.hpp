@@ -14,7 +14,7 @@ public:
     static std::vector<std::string> getMonitorNamesForCurrSystem() {
         std::string hostname = getHostname();
         if (hostname == "nix-desktop") {
-            return { "DP-2", "HDMI-A-3", "HDMI-A-4" };
+            return { "HDMI-A-3", "DP-2", "HDMI-A-4" };
         }
 
         throw std::runtime_error("Hostname '" + hostname + "' not known!");

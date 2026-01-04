@@ -33,6 +33,8 @@ void WorkspaceController::execute(io::CommandHandle &cmd) {
         moveWindow(-1);
     } else if (cmd->args[0] == "mvright") { 
         moveWindow(1);
+    } else {
+        throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
     }
 }
 
