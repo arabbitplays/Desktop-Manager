@@ -48,12 +48,8 @@ void WorkspaceController::switchWorkspace(uint32_t target_virtual) const {
 
 void WorkspaceController::sendWindow(uint32_t target_virtual) const {
     std::string active_window = getActiveWindowId();
-    // Workspace workspace = getCurrentWorkspace();
-    std::cout << active_window << std::endl;
-    std::cout << "wow" << std::endl;
-    std::string s = ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j | jq -r '.id'");
-    std::cout << s << std::endl;
-    // ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " dispatch movetoworkspacesilent " + std::to_string(workspace.physical_id) + std::to_string(target_virtual) + ",address:" + active_window);
+    Workspace workspace = getCurrentWorkspace();
+    ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " dispatch movetoworkspacesilent " + std::to_string(workspace.physical_id) + std::to_string(target_virtual) + ",address:" + active_window);
 }
 
 void WorkspaceController::moveWindow(int32_t physical_delta) const {
@@ -67,10 +63,10 @@ void WorkspaceController::moveWindow(int32_t physical_delta) const {
 }
 
 WorkspaceController::Workspace WorkspaceController::getCurrentWorkspace() const {
-    uint32_t workspace = ShellUtil::parseStringToInt(ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j | jq -r '.id'"));
+    uint32_t workspace = ShellUtil::parseStringToInt(ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j | " + std::string(JQ) + " -r '.id'"));
     return {workspace / 10, workspace % 10};
 }
 
 std::string WorkspaceController::getActiveWindowId() const {
-    return ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activewindow -j | jq -r '.address'");
+    return ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activewindow -j | " + std::string(JQ) + " -r '.address'");
 }
