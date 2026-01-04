@@ -55,14 +55,14 @@
             python3
           ];
 
-          buildPhase = ''
-            meson setup build --prefix=$out
-            meson compile -C build
-          '';
+          # buildPhase = ''
+          #   meson setup build --prefix=$out
+          #   meson compile -C build
+          # '';
 
           installPhase = ''
             mkdir -p $out/bin
-            cp build/DesktopManager $out/bin/DesktopManager
+            cp DesktopManager $out/bin/DesktopManager
           '';
         };
       }
