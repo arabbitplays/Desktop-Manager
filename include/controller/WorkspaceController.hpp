@@ -12,9 +12,6 @@ public:
     void execute(io::CommandHandle &cmd) override;
 
 private:
-    static constexpr char* HYPR_CTL = "/run/current-system/sw/bin/hyprctl";
-    static constexpr char* JQ = "/run/current-system/sw/bin/jq";
-    
     struct Workspace {
         uint32_t physical_id;
         uint32_t virtual_id;
