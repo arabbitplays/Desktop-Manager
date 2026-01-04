@@ -56,6 +56,7 @@ void DesktopManager::run() {
             for (const auto& controller : controllers) {
                 if (controller->getKeyword() == cmd->keyword) {
                     try {
+                        std::cout << "Test" << std::endl;
                         controller->execute(cmd);
                     } catch (const std::exception& e) {
                         std::cout << "Error while executing command: " << e.what() << std::endl;
