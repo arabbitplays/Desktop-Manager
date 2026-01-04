@@ -15,6 +15,8 @@ public:
         std::string hostname = getHostname();
         if (hostname == "nix-desktop") {
             return { "HDMI-A-3", "DP-2", "HDMI-A-4" };
+        } else if (hostname == "nix-laptop") {
+            return { "eDP-1", "HDMI-A-1" };
         }
 
         throw std::runtime_error("Hostname '" + hostname + "' not known!");
