@@ -50,8 +50,8 @@ void WorkspaceController::sendWindow(uint32_t target_virtual) const {
     std::string active_window = getActiveWindowId();
     // Workspace workspace = getCurrentWorkspace();
     std::cout << active_window << std::endl;
-
-    std::string s = ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j | jq -r '.id'");
+    std::cout << "WOOOOO" << std::endl;
+    std::string s = ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " activeworkspace -j");
     std::cout << s << std::endl;
     // ShellUtil::executeShellCommand(std::string(HYPR_CTL) + " dispatch movetoworkspacesilent " + std::to_string(workspace.physical_id) + std::to_string(target_virtual) + ",address:" + active_window);
 }
