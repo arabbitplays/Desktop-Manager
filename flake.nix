@@ -27,7 +27,9 @@
           ];
 
           shellHook = ''
+            export SHELL=${pkgs.zsh}/bin/zsh
             echo "Entered DesktopManager dev environment for ${system}"
+            exec ${pkgs.zsh}/bin/zsh
           '';
         };
       }
