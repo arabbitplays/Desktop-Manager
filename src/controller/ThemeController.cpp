@@ -25,12 +25,12 @@ void ThemeController::execute(io::CommandHandle& cmd) {
     std::string theme_name = cmd->args[0];
     if (theme_name == "tokyo") {
         setKittyTheme("tokyo_night.conf");
-        setNvimTheme("tokyonight-storm");
+        setNvimTheme(theme_name);
         setWallpaperAll("tokyo_night.jpg");
     } else if (theme_name == "forest") {
         setKittyTheme("gruvbox_dark.conf");
         setWallpaperAll("nier.jpg");
-        setNvimTheme("gruvbox");
+        setNvimTheme(theme_name);
     } else {
         throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
     }
@@ -46,21 +46,11 @@ void ThemeController::setWallpaper(const std::string name, const std::string& mo
 
 void ThemeController::setKittyTheme(const std::string& name) {
     std::string src = std::string(KITTY_THEME_DIR) + "/" + name;
-    std::string dst = std::string(KITTY_DIR) + "/current-theme.conf";
+    std::string dst = std::string(KITTY_THEME_FILE);
     FileUtil::copyFile(src, dst);    
     ShellUtil::executeShellCommand("kill -USR1 $(pidof kitty)");
 }
 
 void ThemeController::setNvimTheme(const std::string& name) {
-    const std::string pattern = "/tmp/nvim-";
-    const std::string suffix = "_main";
-
-    // Iterate all files in /tmp and search for nvim sockets
-    for (const auto& entry : fs::directory_iterator("/tmp")) {
-        const std::string path = entry.path().string();
-        if (path.find(pattern) == 0 && path.rfind(suffix) == path.size() - suffix.size()) {
-            std::string cmd = "nvim --server " + path + " --remote-send ':colorscheme " + name + "<CR>'";
-            ShellUtil::executeShellCommand(cmd);
-        }
-    }
+    FileUtil::overwriteFile(std::string(NVIM_THEME_FILE), name);
 }
