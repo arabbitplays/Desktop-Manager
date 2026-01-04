@@ -3,7 +3,10 @@
 #include "util/MonitorUtil.hpp"
 #include "util/ShellUtil.hpp"
 #include "util/FileUtil.hpp"
+#include <filesystem>
 #include <iostream>
+
+namespace fs = std::filesystem;
 
 ThemeController::ThemeController() {
     monitor_names = MonitorUtil::getMonitorNamesForCurrSystem();
@@ -49,5 +52,15 @@ void ThemeController::setKittyTheme(const std::string& name) {
 }
 
 void ThemeController::setNvimTheme(const std::string& name) {
-    ShellUtil::executeShellCommand("nvim --server /tmp/nvim-main --remote-send ':colorscheme " + name + "<CR>'");
+    const std::string pattern = "/tmp/nvim-";
+    const std::string suffix = "_main";
+
+    // Iterate all files in /tmp and search for nvim sockets
+    for (const auto& entry : fs::directory_iterator("/tmp")) {
+        const std::string path = entry.path().string();
+        if (path.find(pattern) == 0 && path.rfind(suffix) == path.size() - suffix.size()) {
+            std::string cmd = "nvim --server " + path + " --remote-send ':colorscheme " + name + "<CR>'";
+            ShellUtil::executeShellCommand(cmd);
+        }
+    }
 }
