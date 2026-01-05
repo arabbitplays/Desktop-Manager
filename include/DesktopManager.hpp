@@ -15,7 +15,7 @@ public:
 
     void activateDevMode();
 private:
-    bool dev_mode_active;
+    bool dev_mode_active = false;
     std::vector<std::shared_ptr<IController>> controllers;
 };
 
