@@ -61,15 +61,14 @@ void DesktopManager::run() {
                         response = controller->execute(cmd);
                     } catch (const std::exception& e) {
                         response = "Error while executing command: " + std::string(e.what());
-                        
                     }
                     write(client, response.c_str(), response.size());
-                    std::cout << "Respnse:\n" << response << std::endl;
+                    std::cout << "Response:\n" << response << std::endl;
                 }
             }
 
             std::string separator(100, '-');
-            std::cout << separator << "\n";
+            std::cout << separator << std::endl;
         }
         close(client);
     }
