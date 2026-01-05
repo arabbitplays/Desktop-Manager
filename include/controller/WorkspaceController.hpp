@@ -9,7 +9,7 @@ public:
     ~WorkspaceController() = default;
 
     std::string getKeyword() const override;
-    void execute(io::CommandHandle &cmd) override;
+    std::string execute(io::CommandHandle &cmd) override;
 
 private:
     struct Workspace {

@@ -16,7 +16,7 @@ std::string WorkspaceController::getKeyword() const {
     return "workspace";
 }
 
-void WorkspaceController::execute(io::CommandHandle &cmd) {
+std::string WorkspaceController::execute(io::CommandHandle &cmd) {
     if (cmd->args.size() < 1) {
         throw std::runtime_error("Expected at least one argument for command " + getKeyword());
     }
@@ -38,6 +38,8 @@ void WorkspaceController::execute(io::CommandHandle &cmd) {
     } else {
         throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
     }
+
+    return "ok";
 }
 
 void WorkspaceController::switchWorkspace(uint32_t target_virtual) const {
@@ -63,7 +65,7 @@ void WorkspaceController::moveWindow(int32_t physical_delta) const {
     physical_id = physical_id == 0 ? monitor_names.size() : physical_id;
     physical_id = physical_id > monitor_names.size() ? 1 : physical_id;
 
-    ShellUtil::executeShellCommand("hyprctl dispatch movetoworkspacesilent " + std::to_string(physical_id) + std::to_string(workspace.virtual_id) + ",address:" + active_window);
+    ShellUtil::executeShellCommand("hyprctl dispatch movetoworkspace " + std::to_string(physical_id) + std::to_string(workspace.virtual_id) + ",address:" + active_window);
 }
 
 WorkspaceController::Workspace WorkspaceController::getCurrentWorkspace() const {

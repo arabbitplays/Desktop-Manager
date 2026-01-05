@@ -8,7 +8,7 @@ public:
     IController() = default;
     ~IController() = default;
 
-    virtual void execute(io::CommandHandle& cmd) = 0;
+    virtual std::string execute(io::CommandHandle& cmd) = 0;
     virtual std::string getKeyword() const = 0;
 private:
 };

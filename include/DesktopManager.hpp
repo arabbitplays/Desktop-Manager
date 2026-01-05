@@ -12,7 +12,10 @@ public:
 
     void init();
     void run();
+
+    void activateDevMode();
 private:
+    bool dev_mode_active;
     std::vector<std::shared_ptr<IController>> controllers;
 };
 

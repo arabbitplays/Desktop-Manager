@@ -5,6 +5,7 @@
 #include "util/FileUtil.hpp"
 #include <filesystem>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 namespace fs = std::filesystem;
@@ -17,10 +18,9 @@ std::string ThemeController::getKeyword() const {
     return "theme";
 }
 
-void ThemeController::execute(io::CommandHandle& cmd) {
+std::string ThemeController::execute(io::CommandHandle& cmd) {
     if (cmd->args.size() != 1) {
-        std::cout << "Command 'theme' requires one string argument\n";
-        return;
+        throw std::runtime_error("Command 'theme' requires one string argument\n");
     };
 
     std::string theme_name = cmd->args[0];
@@ -35,6 +35,8 @@ void ThemeController::execute(io::CommandHandle& cmd) {
     } else {
         throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
     }
+
+    return "ok";
 }
 
 void ThemeController::setWallpaperAll(const std::string& name) {

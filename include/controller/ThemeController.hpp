@@ -18,7 +18,7 @@ public:
     ~ThemeController() = default;
 
     std::string getKeyword() const override;
-    void execute(io::CommandHandle& cmd) override;
+    std::string execute(io::CommandHandle& cmd) override;
 
 private:
     static constexpr char* WALLPAPER_DIR = "~/Resources/Wallpapers";

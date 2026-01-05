@@ -18,7 +18,9 @@ void DesktopManager::init() {
 }
 
 void DesktopManager::run() {
-    std::string socket_path = std::string(getenv("XDG_RUNTIME_DIR")) + "/desktop-manager/desktop-manager.sock"; 
+    std::string socket_path = dev_mode_active
+        ? "/tmp/desktop-manager-dev.sock"
+        : std::string(getenv("XDG_RUNTIME_DIR")) + "/desktop-manager/desktop-manager.sock"; 
 
     int server = socket(AF_UNIX, SOCK_STREAM, 0);
     if (server < 0) { perror("socket"); exit(1); }
@@ -42,7 +44,6 @@ void DesktopManager::run() {
 
     io::CommandParser parser;
 
-    MonitorUtil::getMonitorNamesForCurrSystem();
     while (true) {
         int client = accept(server, nullptr, nullptr);
         char buf[256];
@@ -55,14 +56,25 @@ void DesktopManager::run() {
 
             for (const auto& controller : controllers) {
                 if (controller->getKeyword() == cmd->keyword) {
+                    std::string response = "";
                     try {
-                        controller->execute(cmd);
+                        response = controller->execute(cmd);
                     } catch (const std::exception& e) {
-                        std::cout << "Error while executing command: " << e.what() << std::endl;
+                        response = "Error while executing command: " + std::string(e.what());
+                        std::cout << response << std::endl;
+                        
                     }
+                    write(client, response.c_str(), response.size());
                 }
             }
+
+            std::string separator(100, '-');
+            std::cout << separator << "\n";
         }
         close(client);
     }
+}
+
+void DesktopManager::activateDevMode() {
+    dev_mode_active = true;
 }
