@@ -35,6 +35,9 @@ std::string WorkspaceController::execute(io::CommandHandle &cmd) {
         moveWindow(-1);
     } else if (cmd->args[0] == "mvright") { 
         moveWindow(1);
+    } else if (cmd->args[0] == "getvirtidx") {
+        uint32_t idx = getCurrentVirtualIndex();
+        return std::to_string(idx);
     } else {
         throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
     }
@@ -66,6 +69,11 @@ void WorkspaceController::moveWindow(int32_t physical_delta) const {
     physical_id = physical_id > monitor_names.size() ? 1 : physical_id;
 
     ShellUtil::executeShellCommand("hyprctl dispatch movetoworkspace " + std::to_string(physical_id) + std::to_string(workspace.virtual_id) + ",address:" + active_window);
+}
+
+uint32_t WorkspaceController::getCurrentVirtualIndex() const {
+    Workspace workspace = getCurrentWorkspace();
+    return workspace.virtual_id;
 }
 
 WorkspaceController::Workspace WorkspaceController::getCurrentWorkspace() const {

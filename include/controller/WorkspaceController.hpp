@@ -20,6 +20,7 @@ private:
     void switchWorkspace(uint32_t target_virtual) const;
     void sendWindow(uint32_t target_virtual) const;
     void moveWindow(int32_t physical_delta) const;
+    uint32_t getCurrentVirtualIndex() const;
 
     Workspace getCurrentWorkspace() const;
     std::string getActiveWindowId() const;
