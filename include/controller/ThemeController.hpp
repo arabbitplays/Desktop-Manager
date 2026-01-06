@@ -4,6 +4,7 @@
 #include <string>
 #include "io/CommandParser.hpp"
 #include <controller/IController.hpp>
+#include <unordered_map>
 #include <vector>
 
 class ThemeController : public IController {
@@ -12,6 +13,7 @@ public:
         std::string wallpaper_name;
         std::string kitty_theme;
         std::string nvim_theme;
+        std::string hypr_theme;
     };
 
     ThemeController();
@@ -25,6 +27,8 @@ private:
     static constexpr char* KITTY_THEME_FILE = "~/.config/kitty/current-theme.conf";
     static constexpr char* KITTY_THEME_DIR = "~/.config/kitty/themes";
     static constexpr char* NVIM_THEME_FILE = "~/.config/nvim/current-theme";
+    static constexpr char* HYPR_THEME_FILE = "~/.config/hypr/config/current-theme.conf";
+    static constexpr char* HYPR_THEME_DIR = "~/.config/hypr/themes";
 
     static constexpr char* SWWW_OPTIONS = "--transition-type outer --transition-pos top-right --resize crop";
 
@@ -32,8 +36,10 @@ private:
     void setWallpaper(const std::string name, const std::string& montor_name) const;
     void setKittyTheme(const std::string& name);
     void setNvimTheme(const std::string& name);
+    void setHyprTheme(const std::string& name);
 
     std::vector<std::string> monitor_names;
+    std::unordered_map<std::string, Theme> themes;
 };
 
 #endif // THEME_CONTROLLER

@@ -12,6 +12,20 @@ namespace fs = std::filesystem;
 
 ThemeController::ThemeController() {
     monitor_names = MonitorUtil::getMonitorNamesForCurrSystem();
+
+    themes["tokyo"] = {
+        .wallpaper_name = "tokyo_night.jpg",
+        .kitty_theme = "tokyo_night.conf",
+        .nvim_theme = "tokyo",
+        .hypr_theme = "tokyo.conf"
+    };
+
+    themes["forest"] = {
+        .wallpaper_name = "nier.jpg",
+        .kitty_theme = "gruvbox_dark.conf",
+        .nvim_theme = "forest",
+        .hypr_theme = "forest.conf"
+    };
 }
 
 std::string ThemeController::getKeyword() const {
@@ -24,14 +38,13 @@ std::string ThemeController::execute(io::CommandHandle& cmd) {
     };
 
     std::string theme_name = cmd->args[0];
-    if (theme_name == "tokyo") {
-        setKittyTheme("tokyo_night.conf");
-        setNvimTheme(theme_name);
-        setWallpaperAll("tokyo_night.jpg");
-    } else if (theme_name == "forest") {
-        setKittyTheme("gruvbox_dark.conf");
-        setWallpaperAll("nier.jpg");
-        setNvimTheme(theme_name);
+
+    if (themes.contains(theme_name)) {
+        Theme& theme = themes.at(theme_name);
+        setKittyTheme(theme.kitty_theme);
+        setNvimTheme(theme.nvim_theme);
+        setHyprTheme(theme.hypr_theme);
+        setWallpaperAll(theme.wallpaper_name);
     } else {
         throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
     }
@@ -59,4 +72,12 @@ void ThemeController::setKittyTheme(const std::string& name) {
 
 void ThemeController::setNvimTheme(const std::string& name) {
     FileUtil::overwriteFile(std::string(NVIM_THEME_FILE), name);
+}
+
+void ThemeController::setHyprTheme(const std::string& name) {
+    std::string src = std::string(HYPR_THEME_DIR) + "/" + name;
+    std::string dst = std::string(HYPR_THEME_FILE);
+    FileUtil::copyFile(src, dst);    
+    std::string output = ShellUtil::executeShellCommand("hyprctl reload");
+    ShellUtil::printShellOutput(output);
 }
