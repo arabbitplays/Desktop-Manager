@@ -14,6 +14,7 @@ public:
         std::string kitty_theme;
         std::string nvim_theme;
         std::string hypr_theme;
+        std::string waybar_theme;
     };
 
     ThemeController();
@@ -29,6 +30,8 @@ private:
     static constexpr char* NVIM_THEME_FILE = "~/.config/nvim/current-theme";
     static constexpr char* HYPR_THEME_FILE = "~/.config/hypr/config/current-theme.conf";
     static constexpr char* HYPR_THEME_DIR = "~/.config/hypr/themes";
+    static constexpr char* WAYBAR_THEME_FILE = "~/.config/waybar/current-theme.css";
+    static constexpr char* WAYBAR_THEME_DIR = "~/.config/waybar/themes";
 
     static constexpr char* SWWW_OPTIONS = "--transition-type outer --transition-pos top-right --resize crop";
 
@@ -37,6 +40,7 @@ private:
     void setKittyTheme(const std::string& name);
     void setNvimTheme(const std::string& name);
     void setHyprTheme(const std::string& name);
+    void setWaybarTheme(const std::string& name);
 
     std::vector<std::string> monitor_names;
     std::unordered_map<std::string, Theme> themes;

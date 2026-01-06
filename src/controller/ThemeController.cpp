@@ -17,14 +17,16 @@ ThemeController::ThemeController() {
         .wallpaper_name = "tokyo_night.jpg",
         .kitty_theme = "tokyo_night.conf",
         .nvim_theme = "tokyo",
-        .hypr_theme = "tokyo.conf"
+        .hypr_theme = "tokyo.conf",
+        .waybar_theme = "tokyo.css",
     };
 
     themes["forest"] = {
         .wallpaper_name = "nier.jpg",
         .kitty_theme = "gruvbox_dark.conf",
         .nvim_theme = "forest",
-        .hypr_theme = "forest.conf"
+        .hypr_theme = "forest.conf",
+        .waybar_theme = "forest.css",
     };
 }
 
@@ -44,6 +46,7 @@ std::string ThemeController::execute(io::CommandHandle& cmd) {
         setKittyTheme(theme.kitty_theme);
         setNvimTheme(theme.nvim_theme);
         setHyprTheme(theme.hypr_theme);
+        setWaybarTheme(theme.waybar_theme);
         setWallpaperAll(theme.wallpaper_name);
     } else {
         throw std::runtime_error("Command " + getKeyword() + " " + cmd->args[0] + " does not exist!");
@@ -79,5 +82,16 @@ void ThemeController::setHyprTheme(const std::string& name) {
     std::string dst = std::string(HYPR_THEME_FILE);
     FileUtil::copyFile(src, dst);    
     std::string output = ShellUtil::executeShellCommand("hyprctl reload");
+    ShellUtil::printShellOutput(output);
+}
+
+void ThemeController::setWaybarTheme(const std::string& name) {
+    std::string src = std::string(WAYBAR_THEME_DIR) + "/" + name;
+    std::string dst = std::string(WAYBAR_THEME_FILE);
+    FileUtil::copyFile(src, dst);    
+
+    std::string output = ShellUtil::executeShellCommand("pkill waybar");
+    std::system("waybar > /dev/null 2>&1 &");
+    std::cout << "Started a waybar" << std::endl;
     ShellUtil::printShellOutput(output);
 }
