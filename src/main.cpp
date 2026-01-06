@@ -1,13 +1,13 @@
 #include "DesktopManager.hpp"
 #include "io/CommandParser.hpp"
+#include <memory>
 
 int main(int argc, char* argv[]) {
-    DesktopManager app;
-
+    bool dev_mode = false;
     if (argc == 2 && std::string(argv[1]) == "--dev") {
-        app.activateDevMode();
-    } 
+        dev_mode = true;
+    }
 
-    app.init();
-    app.run();
+    std::shared_ptr<DesktopManager> app = std::make_shared<DesktopManager>(dev_mode);
+    app->run();
 }
