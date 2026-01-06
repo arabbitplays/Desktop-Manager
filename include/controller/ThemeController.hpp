@@ -33,7 +33,7 @@ private:
     static constexpr char* WAYBAR_THEME_FILE = "~/.config/waybar/current-theme.css";
     static constexpr char* WAYBAR_THEME_DIR = "~/.config/waybar/themes";
 
-    static constexpr char* SWWW_OPTIONS = "--transition-type outer --transition-pos top-right --resize crop";
+    static constexpr char* SWWW_OPTIONS = "--transition-type outer --transition-pos top-right --resize crop --transition-bezier=0.1,0.2,0.4,1.0 --transition-fps=60";
 
     void setWallpaperAll(const std::string& name);
     void setWallpaper(const std::string name, const std::string& montor_name) const;
